@@ -38,7 +38,7 @@ while start <= end and start <= 1000:
         display = max(end - start + 1, 0)
 
     # 네이버 검색 API 호출을 위한 URL 생성
-    url = f"https://openapi.naver.com/v1/search/webkr.json?query={query_encoded}&display={display}&start={start}"
+    url = f"https://openapi.naver.com/v1/search/news.json?query={query_encoded}&display={display}&start={start}"
 
     # HTTP 요청을 보내고 응답을 받음
     req = urllib.request.Request(url, headers=headers)
@@ -54,8 +54,9 @@ while start <= end and start <= 1000:
         for item in items:
             result = {
                 "제목": re.sub('<.+?>', '', item["title"]),
-                "웹문서 링크": item["link"],
-                "웹문서 내용": re.sub('<.+?>', '', item["description"]),
+                "뉴스 원본 링크": item["originallink"],
+                "뉴스 내용": re.sub('<.+?>', '', item["description"]),
+                "뉴스 기재 시간": item["pubDate"]
             }
             total_results.append(result)
     else:
