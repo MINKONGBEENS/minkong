@@ -11,7 +11,7 @@ client_secret = 'Naxf078JUD'
 print("\n\n-------------------------------------------------------------")
 query = input("검색어 입력 : ")
 query_encoded = urllib.parse.quote(query)
-my_xlsx = input("엑셀 파일로 저장할 파일 이름 입력 : ")
+my_xlsx = input("저장할 엑셀파일의 이름 입력 : ")
 end = int(input("가져올 데이터의 양 입력 (최대 1000) : "))
 print("-------------------------------------------------------------\n\n")
 
@@ -73,5 +73,5 @@ result_df = pd.DataFrame(total_results)
 output_path = f"./TestData/{my_xlsx}.xlsx"
 result_df.to_excel(output_path, index=False)
 
-print("저장이 완료되었습니다.")
+print(f"{end}건의 데이터가 저장되었습니다.")
 print("\n\n-------------------------------------------------------------\n\n")
