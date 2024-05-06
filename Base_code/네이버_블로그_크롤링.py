@@ -1,3 +1,4 @@
+import os
 import urllib.request
 import pandas as pd
 import json
@@ -11,8 +12,8 @@ client_secret = 'Naxf078JUD'
 print("\n\n-------------------------------------------------------------")
 query = input("검색어 입력 : ")
 query_encoded = urllib.parse.quote(query)
-my_xlsx = input("저장할 엑셀파일의 이름 입력 : ")
-end = int(input("가져올 데이터의 양 입력 (최대 1000) : "))
+my_xlsx = input("엑셀 파일로 저장할 파일 이름 입력 : ")
+end = int(input("가져올 데이터의 양 입력 : "))
 print("-------------------------------------------------------------\n\n")
 
 # 한 번에 가져올 결과 수 (API 요청 당 최대 100개의 결과)
@@ -31,7 +32,7 @@ headers = {
 start = 1
 
 # 총 결과 수(end 값)까지 반복하여 가져오기
-while start <= end and start <= 1000:
+while start <= end:
 
     # 한 번에 가져올 결과 수가 남은 결과 수보다 많을 경우에는 최대 값으로 설정
     if end - start + 1 < display:
@@ -45,8 +46,7 @@ while start <= end and start <= 1000:
     response = urllib.request.urlopen(req)
 
     # 응답 코드 확인
-    rescode = response.getcode()
-    if rescode == 200:
+    if response.getcode() == 200:
         # 응답 본문을 읽어옴
         response_dict = json.loads(response.read().decode("utf-8"))
         # 검색 결과 중 내용만 추출하여 결과 리스트에 추가
@@ -61,17 +61,17 @@ while start <= end and start <= 1000:
                 "게시 날짜": item["postdate"]
             }
             total_results.append(result)
-    else:
-        print(f"Error code : {rescode}")        
 
     start += display  # 다음 요청을 위해 start 값 업데이트
 
 # 결과를 데이터프레임으로 변환
 result_df = pd.DataFrame(total_results)
 
+# 결과를 저장할 디렉토리 생성
+os.makedirs("TestData", exist_ok=True)
+
 # 데이터프레임을 엑셀 파일로 저장
-output_path = f"./TestData/{my_xlsx}.xlsx"
+output_path = f"TestData/{my_xlsx}.xlsx"
 result_df.to_excel(output_path, index=False)
 
-print(f"{end}건의 데이터가 저장되었습니다.")
-print("\n\n-------------------------------------------------------------\n\n")
+print("저장이 완료되었습니다.")
