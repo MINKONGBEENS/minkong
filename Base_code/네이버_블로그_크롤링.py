@@ -1,4 +1,5 @@
 import os
+import sys
 import urllib.request
 import pandas as pd
 import json
@@ -7,6 +8,9 @@ import re
 # 네이버 API 클라이언트 ID와 시크릿
 client_id = 'uxBMxwJzw_zJHEfayokT'
 client_secret = 'Naxf078JUD'
+
+# 현재 스크립트 파일의 경로를 가져옴
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 사용자로부터 검색어와 엑셀 파일명, 가져올 결과 수를 입력받음
 print("\n\n-------------------------------------------------------------")
@@ -68,10 +72,11 @@ while start <= end:
 result_df = pd.DataFrame(total_results)
 
 # 결과를 저장할 디렉토리 생성
-os.makedirs("TestData", exist_ok=True)
+output_dir = os.path.join(script_dir, "TestData")
+os.makedirs(output_dir, exist_ok=True)
 
 # 데이터프레임을 엑셀 파일로 저장
-output_path = f"TestData/{my_xlsx}.xlsx"
+output_path = os.path.join(output_dir, f"{my_xlsx}.xlsx")
 result_df.to_excel(output_path, index=False)
 
-print("저장이 완료되었습니다.")
+print(f"{end}건의 데이터 저장 완료.")
